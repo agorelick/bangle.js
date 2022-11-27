@@ -3,13 +3,13 @@
 var max_size=10;
 var width=17;
 var border=3;
-var fill_prob=0.05;
+var fill_prob=0.18;
 var step_count=0;
 var mat = new Array(max_size);
 var neighbors = new Array(max_size);
 var new_mat = new Array(max_size);
-
-
+var changingCells = 0;
+var max_steps = 60;
 
 // function to generate a random initial matrix
 function getRandomMatrix (mat) {
@@ -133,20 +133,34 @@ function updateMatrix(mat, neighbors) {
 }
 
 
+// not working, the numbers are reset but the matrix isn't
+function restart() {
+  g.clear();
+  changingCells = 0;
+  step_count = 0;
+  E.showMessage("Restarting");
+  console.log("Restarting");
+}
+
+
 function step() {
   console.log(step_count);
   
   // show the current state before any updates
-  console.log(mat);
-  console.log(neighbors);
+  //console.log(mat);
+  //console.log(neighbors);
   
   // clear screen
   g.clear();
   
   // check if extinct, if so, regenerate all
-  var changingCells = countChangingCells(mat, neighbors);
+  changingCells = countChangingCells(mat, neighbors);  
   
-  if(changingCells==0) {
+  // not working, the numbers are reset but the matrix isn't
+  // if user presses button, restart it by setting step_count to 0
+  //setWatch(restart, (process.env.HWVERSION==2) ? BTN1 : BTN2);
+  
+  if(changingCells==0 || step_count >= max_steps) {
     mat = getRandomMatrix(mat);
     step_count = 0;
   
@@ -175,6 +189,7 @@ function step() {
 }
 
 
+
 // initialize the matrix (array of arrays) mat
 // then for each element of the array mat, create a new array
 for (var i = 0; i < max_size; i++) {
@@ -182,6 +197,8 @@ for (var i = 0; i < max_size; i++) {
   new_mat[i] = new Array(max_size);
   neighbors[i] = new Array(max_size);
 }
+
+
 mat = getRandomMatrix(mat);
 neighbors = getNeighborCount(mat);
 var interval = setInterval(step, 100);
