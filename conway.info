@@ -1,0 +1,6 @@
+require("Storage").write("conway.info",{
+  "id":"conway",
+  "name":"Game of Life",
+  "src":"conway.app.js",
+  "icon":"conway.img"
+});
